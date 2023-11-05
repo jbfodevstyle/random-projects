@@ -43,6 +43,14 @@
       border-radius: 5px;
       cursor: pointer;
     }
+
+    .countdown {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 48px;
+    }
   </style>
 </head>
 
@@ -51,12 +59,15 @@
     <div class="circle"></div>
   </div>
   <button class="start-button">Start</button>
+  <div class="countdown"></div>
 
   <script>
     const gameContainer = document.querySelector('.game-container');
     const circle = document.querySelector('.circle');
     const startButton = document.querySelector('.start-button');
+    const countdownElement = document.querySelector('.countdown');
     let isGameStarted = false;
+    let countdown = 3;
 
     function updateCirclePosition(event) {
       if (isGameStarted) {
@@ -82,6 +93,19 @@
       }
     }
 
+    function startCountdown() {
+      countdownElement.textContent = countdown;
+      countdown--;
+
+      if (countdown < 0) {
+        countdownElement.style.display = 'none';
+        startGame();
+        return;
+      }
+
+      setTimeout(startCountdown, 1000);
+    }
+
     function startGame() {
       isGameStarted = true;
       circle.style.display = 'block';
@@ -98,11 +122,13 @@
       stopGame();
       const retry = confirm('Game Over! Your cursor was caught! Retry?');
       if (retry) {
-        startGame();
+        countdown = 3;
+        countdownElement.style.display = 'block';
+        startCountdown();
       }
     }
 
-    startButton.addEventListener('click', startGame);
+    startButton.addEventListener('click', startCountdown);
   </script>
 </body>
 
