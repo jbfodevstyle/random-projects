@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Breaker Game</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .game-container {
+            text-align: center;
+        }
+
+        .draggable {
+            width: 100px;
+            height: 50px;
+            background-color: lightblue;
+            border: 1px solid #000;
+            margin: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>Level <span id="level">1</span></h1>
+        <div id="clue" class="draggable">Drag Me!</div>
+        <div id="drop-zone" style="border: 2px dashed #000; height: 100px; margin-top: 20px;"></div>
+        <input type="text" id="codeInput" placeholder="Enter the code">
+        <button onclick="checkCode()">Submit</button>
+        <div id="message"></div>
+    </div>
+
+    <script>
+        let clues = ['clue1', 'clue2', 'clue3', 'clue4', 'clue5'];
+        let levels = ['1234', '5678', '91011', '121314', '151617'];
+        let currentLevel = 0;
+        let currentClue = null;
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const clueElement = document.getElementById('clue');
+            clueElement.draggable = true;
+
+            clueElement.ondragstart = function(event) {
+                event.dataTransfer.setData('text/plain', clueElement.id);
+            }
+
+            const dropZone = document.getElementById('drop-zone');
+            dropZone.ondragover = function(event) {
+                event.preventDefault();
+            }
+
+            dropZone.ondrop = function(event) {
+                event.preventDefault();
+                const clueId = event.dataTransfer.getData('text/plain');
+                const draggedClue = document.getElementById(clueId);
+                dropZone.appendChild(draggedClue);
+                currentClue = clueId;
+            }
+        });
+
+        function checkCode() {
+            const userInput = document.getElementById('codeInput').value;
+            const message = document.getElementById('message');
+
+            if (userInput === levels[currentLevel] && currentClue === clues[currentLevel]) {
+                message.textContent = 'Correct! Proceed to the next level.';
+                currentLevel++;
+
+                if (currentLevel < levels.length) {
+                    document.getElementById('level').textContent = currentLevel + 1;
+                    document.getElementById('codeInput').value = '';
+                    document.getElementById('drop-zone').innerHTML = '';
+                } else {
+                    message.textContent = 'Congratulations! You completed all levels.';
+                    document.getElementById('codeInput').setAttribute('disabled', true);
+                    document.getElementById('clue').setAttribute('draggable', false);
+                }
+            } else {
+                message.textContent = 'Wrong code or clue. Try again.';
+            }
+        }
+    </script>
+</body>
+</html>
