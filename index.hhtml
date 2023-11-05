@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cursor Avoider Game</title>
+  <style>
+    body {
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f0f0f0;
+    }
+
+    .game-container {
+      position: relative;
+      width: 300px;
+      height: 300px;
+      background-color: #66ccff;
+      border-radius: 50%;
+    }
+
+    .circle {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      background-color: red;
+      border-radius: 50%;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="game-container">
+    <div class="circle"></div>
+  </div>
+
+  <script>
+    const circle = document.querySelector('.circle');
+    const gameContainer = document.querySelector('.game-container');
+
+    let isGameOver = false;
+    let score = 0;
+
+    function updateCirclePosition(event) {
+      if (!isGameOver) {
+        const x = event.clientX - gameContainer.offsetLeft - circle.clientWidth / 2;
+        const y = event.clientY - gameContainer.offsetTop - circle.clientHeight / 2;
+
+        circle.style.left = `${Math.min(gameContainer.clientWidth - circle.clientWidth, Math.max(0, x))}px`;
+        circle.style.top = `${Math.min(gameContainer.clientHeight - circle.clientHeight, Math.max(0, y))}px`;
+      }
+    }
+
+    function checkCollision() {
+      const circleRect = circle.getBoundingClientRect();
+      const gameRect = gameContainer.getBoundingClientRect();
+
+      if (
+        circleRect.left < gameRect.left ||
+        circleRect.right > gameRect.right ||
+        circleRect.top < gameRect.top ||
+        circleRect.bottom > gameRect.bottom
+      ) {
+        gameOver();
+      }
+    }
+
+    function gameOver() {
+      isGameOver = true;
+      alert(`Game Over! Your score: ${score}`);
+      resetGame();
+    }
+
+    function resetGame() {
+      isGameOver = false;
+      score = 0;
+      circle.style.left = '125px';
+      circle.style.top = '125px';
+    }
+
+    function updateScore() {
+      if (!isGameOver) {
+        score++;
+        if (score === 60) {
+          alert(`Congratulations! You won with a score of 60!`);
+          resetGame();
+        }
+      }
+    }
+
+    gameContainer.addEventListener('mousemove', updateCirclePosition);
+    gameContainer.addEventListener('mouseleave', gameOver);
+    gameContainer.addEventListener('mouseenter', resetGame);
+    setInterval(checkCollision, 10);
+    setInterval(updateScore, 1000);
+  </script>
+</body>
+
+</html>
