@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            background-color: white;
+            color: black;
+            font-family: Arial, sans-serif;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            border: 2px solid black;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .blue-text {
+            color: blue;
+        }
+
+        .black-text {
+            color: black;
+        }
+
+        #webhookInput {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+    </style>
+    <title>Webhook Manager</title>
+</head>
+<body>
+    <div class="container">
+        <h1 class="blue-text">Webhook Manager</h1>
+        <label class="black-text" for="webhookInput">Enter Discord Webhook URL:</label>
+        <input type="text" id="webhookInput" placeholder="https://discord.com/api/webhooks/...">
+        <button id="deleteButton" class="black-text">Delete Webhook</button>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const webhookInput = document.getElementById("webhookInput");
+            const deleteButton = document.getElementById("deleteButton");
+
+            deleteButton.addEventListener("click", function () {
+                const webhookUrl = webhookInput.value.trim();
+
+                if (webhookUrl) {
+                    // Perform webhook deletion logic
+                    fetch(webhookUrl, {
+                        method: "DELETE",
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            alert("Webhook deleted successfully!");
+                        } else {
+                            alert(`Failed to delete webhook. Status: ${response.status}`);
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error deleting webhook:", error);
+                        alert("An error occurred while deleting the webhook.");
+                    });
+                } else {
+                    alert("Please enter a valid webhook URL");
+                }
+            });
+        });
+    </script>
+</body>
+</html>
