@@ -63,7 +63,8 @@
         <button id="deleteButton">Delete Webhook</button>
     </div>
     <div class="footer">
-        <p>Created by <a href="https://www.gammacompany.com" target="_blank">Gamma Client</a></p>
+        <p>Created by <a href="https://discord.gg/Zj6Gb9hKfG" target="_blank">Gamma Client</a></p>
+        <p>Also its open soruce :D <a href="https://github.com/jbfodevstyle/random-projects/edit/main/delete.html" target="_blank">Click here to view</a></p>
     </div>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
@@ -74,7 +75,6 @@
                 const webhookUrl = webhookInput.value.trim();
 
                 if (webhookUrl) {
-                    // Perform webhook deletion logic
                     fetch(webhookUrl, {
                         method: "DELETE",
                     })
